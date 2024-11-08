@@ -1,0 +1,73 @@
+create database bd_formativa;
+
+create table universidade (
+	id_uni int primary key auto_increment,
+    nome varchar(255) not null,
+    telefone varchar(255) not null,
+    rua varchar(255) not null,
+    cep varchar(255) not null,
+    bairro varchar(255) not null,
+    numero int not null,
+    cidade varchar(255) not null
+);
+
+create table estudante (
+	id_estudante int primary key auto_increment,
+    nome varchar(255) not null,
+    telefone varchar(255) not null,
+    rua varchar(255) not null,
+    cep varchar(255) not null,
+    bairro varchar(255) not null,
+    numero int not null,
+    cidade varchar(255) not null,
+    id_uni int,
+    foreign key (id_uni) references universidade (id_uni)
+);
+
+insert into universidade (nome, telefone, rua, cep, bairro, numero, cidade) values
+('Universidade Federal do Rio de Janeiro', '2134567890', 'Av. Brigadeiro Trompowski', '21941-590', 'Ilha do Fundão', 374, 'Rio de Janeiro'),
+('Universidade de São Paulo', '1134567890', 'Rua da Reitoria', '05508-220', 'Butantã', 109, 'São Paulo'),
+('Universidade Estadual de Campinas', '1934567890', 'Rua José de Alencar', '13083-970', 'Barão Geraldo', 102, 'Campinas'),
+('Universidade Federal de Minas Gerais', '3134567890', 'Av. Antônio Carlos', '31270-901', 'Pampulha', 6627, 'Belo Horizonte'),
+('Universidade Federal do Rio Grande do Sul', '5134567890', 'Av. Paulo Gama', '90046-900', 'Farroupilha', 110, 'Porto Alegre');
+
+insert into estudante (nome, telefone, rua, cep, bairro, numero, cidade, id_uni) values
+('João da Silva', '2198765432', 'Rua Afonso Pena', '20010-000', 'Centro', 500, 'Rio de Janeiro', 1),
+('Maria Oliveira', '1198765432', 'Av. Vital Brasil', '05503-001', 'Butantã', 300, 'São Paulo', 2),
+('Carlos Souza', '1998765432', 'Rua Jorge Figueiredo Corrêa', '13083-852', 'Cidade Universitária', 100, 'Campinas', 3),
+('Ana Costa', '3198765432', 'Rua dos Guajajaras', '30180-100', 'Centro', 250, 'Belo Horizonte', 4),
+('Paulo Mendes', '5198765432', 'Av. Ipiranga', '90160-091', 'Praia de Belas', 101, 'Porto Alegre', 5);
+
+-- ATUALIZANDO NOME DA UNIVERSIDADE COM ID 1
+update universidade
+set nome = "Universidade do Estado do Rio de Janeiro"
+where id_uni = 1;
+
+-- ATUALIZANDO NOME DO ESTUDANTE COM ID 3
+update estudante
+set nome = "Carlos Souza Oliveira"
+where id_estudante = 3;
+
+-- DELETANDO O ESTUDANTE COM ID 2
+delete from estudante
+where id_estudante = 2;
+
+-- LISTANDO ESTUDANTES COM AS INFORMAÇÕES DA UNIVERSIDADE
+select estudante.nome as nome_estudante,
+       universidade.nome as nome_universidade,
+       universidade.cidade as cidade_universidade
+from estudante
+inner join universidade 
+on estudante.id_uni = universidade.id_uni;
+
+-- CRIANDO UMA VIEW COM ESTUDANTES E SUAS UNIVERSIDADES
+create view vw_estudantes_universidades as 
+select estudante.nome as nome_estudante,
+       universidade.nome as nome_universidade,
+       universidade.cidade as cidade_universidade
+from estudante
+inner join universidade 
+on estudante.id_uni = universidade.id_uni;
+
+-- CONSULTANDO A VIEW
+select * from vw_estudantes_universidades;
