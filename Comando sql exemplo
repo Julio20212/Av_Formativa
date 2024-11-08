@@ -1,0 +1,68 @@
+create database av_formativafisico1;
+
+create table aeronave (
+	id_nave int primary key auto_increment,
+    nome varchar(255) not null,
+    comunicador varchar(255),
+    destino varchar(255)
+);
+
+create table passageiro (
+	id_pass int primary key auto_increment,
+    nome varchar(255) not null,
+    telefone varchar(255),
+    endereco varchar(255),
+    id_nave int,
+    foreign key (id_nave) references aeronave (id_nave)
+);
+
+insert into aeronave (nome, comunicador, destino) 
+values	('Explorer', 'Comunicador Alpha', 'Aeroporto de Guarulhos, São Paulo'),
+		('Voyager', 'Comunicador Beta', 'Aeroporto de Heathrow, Londres'),
+		('Pioneer', 'Comunicador Gamma', 'Aeroporto Internacional de Tóquio, Japão'),
+		('Odyssey', 'Comunicador Delta', 'Aeroporto de Charles de Gaulle, Paris'),
+		('Endeavour', 'Comunicador Epsilon', 'Aeroporto Internacional de Dubai, Emirados Árabes Unidos');
+
+insert into passageiro (nome, telefone, endereco, id_nave) 
+values	('Alice Silva', '123456789', 'Rua Alfa, 100', 1),
+		('Bruno Costa', '987654321', 'Rua Beta, 200', 2),
+		('Carlos Souza', '555555555', 'Rua Gama, 300', 3),
+		('Daniela Rocha', '444444444', 'Rua Delta, 400', 4),
+		('Eduardo Lima', '333333333', 'Rua Épsilon, 500', 5);
+
+select * from aeronave;
+select * from passageiro;
+
+#ATUALIZANDO NOME DO PASSAGEIRO DO ID 1
+update passageiro
+set nome = "Alberto Silva"
+where id_pass = 1;
+
+#ATUALIZANDO NOME DA AERONAVE DO ID 3
+update aeronave
+set nome = "Air France"
+where id_nave = 3;
+
+#DELETANDO O PASSAGEIRO DO ID 5
+delete from passageiro
+where id_pass = 5;
+
+#LISTANDO OS PASSAGEIROS COM AS INFORMAÇÕES DA AERONAVE
+-- NOME_PASS, NOME_NAVE, DESTINO_NAVE
+select 	passageiro.nome as nome_passageiro,
+		aeronave.destino as destio_aeronave,
+        aeronave.nome as nome_aeronave
+from passageiro
+inner join aeronave 
+on passageiro.id_nave = aeronave.id_nave;
+
+#CRIANDO UMA VIEW
+create view vw_passageiros_voa as 
+select 	passageiro.nome as nome_passageiro,
+		aeronave.destino as destio_aeronave,
+        aeronave.nome as nome_aeronave
+from passageiro
+inner join aeronave 
+on passageiro.id_nave = aeronave.id_nave;
+
+select * from vw_passageiros_voa;
